@@ -1,6 +1,6 @@
 # fa18_mini1_team2
 ## Breast Mammography Multi-Classification of Breast Density
-Credits to: Mian, Vishnu
+Credits to: Mian, Vishnu, Yingxin
 
 Description: This project uses data from the Digital Database for Screening Mammography to train a classifier which determines the breast density given a mammography dicom image. 
 
