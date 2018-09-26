@@ -6,13 +6,18 @@ from skimage.transform import resize
 import argparse
 
 
+train_csv = pd.read_csv('mass_case_description_train_set.csv')
+test_csv = pd.read_csv('mass_case_description_test_set.csv')
+
 class DicomReader:
     def __init__(self, train_or_test):
         self.train_or_test = train_or_test
         if train_or_test == 'train':
             self.files = os.listdir('training/CBIS-DDSM')
+            self.csv = train_csv
         else:
             self.files = os.listdir('test/CBIS-DDSM')
+            self.csv = test_csv
         self.curr = 0
 
     def next_file(self, dim1, dim2):
@@ -37,16 +42,9 @@ class DicomReader:
             if path[i:i + 2] == 'P_':
                 p_id = path[i:i + 7]
                 break
+                
         # Grab breast density given p_id
-        c = pd.read_csv('mass_case_description_' + self.train_or_test + '_set.csv')
-        a = c['patient_id']
-        b = c['breast_density']
-        x = -1
-        for i in range(len(a)):
-            if a[i] == p_id:
-                x = i
-                break
-        return [out, b[i]]
+        return [out, self.csv['breast_density'][self.csv.patient_id == p_id].mode()]
 
     def training_input(self, dim1, dim2, batch_size=None):
         inputs = []
